@@ -10,4 +10,8 @@ public class NoDisturbance extends AbstractEvent{
     public void print() {
         System.out.printf("[방해금지] %s%n", getTitle());
     }
+
+    public boolean support(EventType type) {
+        return type == EventType.NoDisturbance;
+    }
 }

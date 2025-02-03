@@ -16,4 +16,8 @@ public class Todo extends AbstractEvent {
     public void print() {
         System.out.printf("[할일] %s : %s%n", getTitle(), description);
     }
+
+    public boolean support(EventType type) {
+        return type == EventType.Todo;
+    }
 }
