@@ -3,6 +3,7 @@ package com.example.toycalendarapp;
 import com.example.toycalendarapp.event.*;
 import com.example.toycalendarapp.event.update.UpdateMeeting;
 import com.example.toycalendarapp.reader.EventCsvReader;
+import com.example.toycalendarapp.reader.RawCsvReader;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
@@ -15,7 +16,7 @@ public class ToyCalendarAppApplication {
     public static void main(String[] args) throws IOException {
         Schedule schedule = new Schedule();
 
-        EventCsvReader csvReader = new EventCsvReader();
+        EventCsvReader csvReader = new EventCsvReader(new RawCsvReader());
         String meetingCsvPath = "/data/meeting.csv";
 
         List<Meeting> meetings = csvReader.readMeetings(meetingCsvPath);

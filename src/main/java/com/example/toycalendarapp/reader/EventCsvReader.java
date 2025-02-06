@@ -17,11 +17,18 @@ import java.util.HashSet;
 import java.util.List;
 
 public class EventCsvReader {
+
+    private final RawCsvReader rawCsvReader;
+
+    public EventCsvReader(RawCsvReader rawCsvReader) {
+        this.rawCsvReader = rawCsvReader;
+    }
+
     public List<Meeting> readMeetings(String path) throws IOException{
         List<Meeting> result = new ArrayList<>();
 
         // 데이터를 읽는 부분
-        List<String[]> read = readAll(path);
+        List<String[]> read = rawCsvReader.readAll(path);
         for(int i= 0; i< read.size(); i++){
             if (skipHeader(i)) {
                 continue;
