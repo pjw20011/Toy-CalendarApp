@@ -1,6 +1,9 @@
 package com.example.toycalendarapp.reader;
 
 import com.example.toycalendarapp.event.Meeting;
+import com.example.toycalendarapp.event.NoDisturbance;
+import com.example.toycalendarapp.event.OutOfOffice;
+import com.example.toycalendarapp.event.Todo;
 import com.opencsv.CSVReader;
 
 import java.io.IOException;
@@ -58,21 +61,115 @@ public class EventCsvReader {
             );
 
         }
+        return result;
+    }
 
+    public List<NoDisturbance> readNoDisturbance(String path) throws IOException{
+        List<NoDisturbance> result = new ArrayList<>();
 
+        // 데이터를 읽는 부분
+        List<String[]> read = rawCsvReader.readAll(path);
+        for(int i= 0; i< read.size(); i++){
+            if (skipHeader(i)) {
+                continue;
+            }
+
+            String[] each = read.get(i);
+
+            //Meeting 으로 변환하는 부분
+            result.add(
+                    new NoDisturbance(
+                            Integer.parseInt(each[0]), // ID
+                            each[2], // 제목
+                            ZonedDateTime.of(
+                                    LocalDateTime.parse(
+                                            each[3].trim(), // 앞뒤 공백 제거
+                                            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")), // T 포함된 형식
+                                    ZoneId.of("Asia/Seoul")),
+                            ZonedDateTime.of(
+                                    LocalDateTime.parse(
+                                            each[4].trim(), // 앞뒤 공백 제거
+                                            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")), // T 포함된 형식
+                                    ZoneId.of("Asia/Seoul"))
+                    )
+            );
+
+        }
+        return result;
+    }
+
+    public List<OutOfOffice> readOutOfOffice(String path) throws IOException{
+        List<OutOfOffice> result = new ArrayList<>();
+
+        // 데이터를 읽는 부분
+        List<String[]> read = rawCsvReader.readAll(path);
+        for(int i= 0; i< read.size(); i++){
+            if (skipHeader(i)) {
+                continue;
+            }
+
+            String[] each = read.get(i);
+
+            //Meeting 으로 변환하는 부분
+            result.add(
+                    new OutOfOffice(
+                            Integer.parseInt(each[0]), // ID
+                            each[2], // 제목
+                            ZonedDateTime.of(
+                                    LocalDateTime.parse(
+                                            each[3].trim(), // 앞뒤 공백 제거
+                                            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")), // T 포함된 형식
+                                    ZoneId.of("Asia/Seoul")),
+                            ZonedDateTime.of(
+                                    LocalDateTime.parse(
+                                            each[4].trim(), // 앞뒤 공백 제거
+                                            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")), // T 포함된 형식
+                                    ZoneId.of("Asia/Seoul")
+                    )
+                    )
+            );
+
+        }
+        return result;
+    }
+
+    public List<Todo> readTodo(String path) throws IOException{
+        List<Todo> result = new ArrayList<>();
+
+        // 데이터를 읽는 부분
+        List<String[]> read = rawCsvReader.readAll(path);
+        for(int i= 0; i< read.size(); i++){
+            if (skipHeader(i)) {
+                continue;
+            }
+
+            String[] each = read.get(i);
+
+            //Meeting 으로 변환하는 부분
+            result.add(
+                    new Todo(
+                            Integer.parseInt(each[0]), // ID
+                            each[2], // 제목
+                            ZonedDateTime.of(
+                                    LocalDateTime.parse(
+                                            each[4].trim(), // 앞뒤 공백 제거
+                                            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")), // T 포함된 형식
+                                    ZoneId.of("Asia/Seoul")),
+                            ZonedDateTime.of(
+                                    LocalDateTime.parse(
+                                            each[5].trim(), // 앞뒤 공백 제거
+                                            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")), // T 포함된 형식
+                                    ZoneId.of("Asia/Seoul")),
+                            each[3] // 설명
+                    )
+            );
+
+        }
         return result;
     }
 
     private boolean skipHeader(int i) {
         return i == 0;
-    }
-
-    private List<String[]> readAll(String path) throws IOException {
-        InputStream in = getClass().getResourceAsStream(path);
-        InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
-
-        CSVReader csvReader = new CSVReader(reader);
-        return csvReader.readAll();
     }
 
 }

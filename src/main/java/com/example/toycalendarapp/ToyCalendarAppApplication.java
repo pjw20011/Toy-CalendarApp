@@ -18,43 +18,23 @@ public class ToyCalendarAppApplication {
 
         EventCsvReader csvReader = new EventCsvReader(new RawCsvReader());
         String meetingCsvPath = "/data/meeting.csv";
+        String noDisturbanceCsvPath = "/data/no_disturbance.csv";
+        String outOfOfficeCsvPath = "/data/out_of_office.csv";
+        String toDoCsvPath = "/data/to_do.csv";
 
         List<Meeting> meetings = csvReader.readMeetings(meetingCsvPath);
-        meetings.forEach(each -> schedule.add(each));
+        meetings.forEach(schedule::add);
 
-        Meeting meeting = meetings.get(0);
-        meeting.print();
+        List<NoDisturbance> noDisturbances = csvReader.readNoDisturbance(noDisturbanceCsvPath);
+        noDisturbances.forEach(schedule::add);
 
+        List<OutOfOffice> outOfOffices = csvReader.readOutOfOffice(outOfOfficeCsvPath);
+        outOfOffices.forEach(schedule::add);
 
-        System.out.println("수정 후.....");
+        List<Todo> todos = csvReader.readTodo(toDoCsvPath);
+        todos.forEach(schedule::add);
 
-        meetings.get(0).validateUpdate(
-                new UpdateMeeting(
-                        "new title",
-                        ZonedDateTime.now(),
-                        ZonedDateTime.now().plusHours(1),
-                        null,
-                        "A",
-                        "new agenda"
-                )
-        );
-
-        meeting.delete(true);
-        meeting.print();
-
-        System.out.println("삭제 후 수정 .....");
-
-        meetings.get(0).validateUpdate(
-                new UpdateMeeting(
-                        "new title2",
-                        ZonedDateTime.now(),
-                        ZonedDateTime.now().plusHours(1),
-                        null,
-                        "B",
-                        "new agenda2"
-                )
-        );
-
+        schedule.printAll();
 
 
        // SpringApplication.run(ToyCalendarAppApplication.class, args);
